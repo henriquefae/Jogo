@@ -28,7 +28,13 @@ function jogoDaBlow(estrategiaJogador1, estrategiaJogador2) {
     }
   }
 
-  return { moedasJogador1, moedasJogador2 };
+  const nomeEstrategiaJogador1 = estrategiaJogador1.name;
+  const nomeEstrategiaJogador2 = estrategiaJogador2.name;
+
+  return {
+    [nomeEstrategiaJogador1]: moedasJogador1,
+    [nomeEstrategiaJogador2]: moedasJogador2
+  };
 }
 
 // Exemplo de utilização

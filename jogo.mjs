@@ -1,14 +1,15 @@
-import {estrategiaColaborarPrimeiraRodada} from "./estrategias/EstrategiaExemplo1.mjs";
-import {estrategiaFalharPrimeiraRodada} from './estrategias/EstrategiaExemplo2.mjs';
+import {estrategiaColaborarPrimeiroERepetir} from "./estrategias/estrategiaColaborarPrimeiroERepetir.mjs";
+import {estrategiaFalharApenasNaPrimeira} from './estrategias/estrategiaFalharApenasNaPrimeira.mjs';
+import { estrategiaAleatoria } from "./estrategias/estrategiaAleatoria.mjs";
 
-function jogoDaBlow(estrategiaJogador1, estrategiaJogador2) {
+function jogoDaBlow(estrategiaJogador1, estrategiaJogador2, quantRodadas) {
   let moedasJogador1 = 0;
   let moedasJogador2 = 0;
 
   const historicoDecisoesJogador1 = [];
   const historicoDecisoesJogador2 = [];
 
-  for (let rodada = 0; rodada < 200; rodada++) {
+  for (let rodada = 0; rodada < quantRodadas; rodada++) {
     const decisaoJogador1 = estrategiaJogador1(historicoDecisoesJogador2);
     const decisaoJogador2 = estrategiaJogador2(historicoDecisoesJogador1);
 
@@ -28,17 +29,68 @@ function jogoDaBlow(estrategiaJogador1, estrategiaJogador2) {
     }
   }
 
-  const nomeEstrategiaJogador1 = estrategiaJogador1.name;
-  const nomeEstrategiaJogador2 = estrategiaJogador2.name;
-
   return {
-    [nomeEstrategiaJogador1]: moedasJogador1,
-    [nomeEstrategiaJogador2]: moedasJogador2
+    [estrategiaJogador1.name]: moedasJogador1,
+    [estrategiaJogador2.name]: moedasJogador2
   };
 }
 
-// Exemplo de utilização
-const resultado = jogoDaBlow(
-  estrategiaColaborarPrimeiraRodada, estrategiaFalharPrimeiraRodada
-);
-console.log(resultado);
+// Teste 1 jogo
+// const resultado = jogoDaBlow(
+//   estrategiaFalharApenasNaPrimeira, estrategiaAleatoria, quantRodadas
+// );
+// console.log(resultado);
+
+function campeonatoDaBlow (arrayDeEstrategias, quantRodadas) {
+  const resultadosAcumulados = new Array(arrayDeEstrategias.length).fill(0);
+
+  //todos jogadores jogam entre si e consigo mesmo 1 vez, sem repetição
+  for (let i = 0; i < arrayDeEstrategias.length; i++) {
+    for (let j = i; j < arrayDeEstrategias.length; j++) {
+      const resultado = Object.values(
+        jogoDaBlow(arrayDeEstrategias[i], arrayDeEstrategias[j], quantRodadas)
+      );
+
+      if (i !== j) {
+        resultadosAcumulados[i] += resultado[0];
+        resultadosAcumulados[j] += resultado[1];
+      } else {
+        resultadosAcumulados[i] += resultado[0];
+      }
+    }
+  }
+
+  const placar = resultadosAcumulados.map((resultado, index) => ({
+    [arrayDeEstrategias[index].name]: resultado
+  }));
+
+  return placar;
+}
+
+const arrayDeEstrategias = [
+  estrategiaAleatoria,
+  estrategiaFalharApenasNaPrimeira,
+  estrategiaColaborarPrimeiroERepetir
+];
+
+const quantCampeonatos = 5;
+let resultadosCampeonatao = new Array(arrayDeEstrategias.length).fill(0);
+const arrayQuantRodadas = [];
+for (let i = 0; i < quantCampeonatos; i++) {
+  const quantRodadas = Math.ceil(Math.random() * 800 + 200); //entre 200 e 1000 rodadas
+  arrayQuantRodadas.push(quantRodadas);
+  const placar = campeonatoDaBlow(
+    arrayDeEstrategias, quantRodadas
+  );
+  for (let j = 0; j < arrayDeEstrategias.length; j++){
+    resultadosCampeonatao[j] += Object.values(placar[j])[0];
+  }
+}
+const placarCampeonatao = resultadosCampeonatao.map((resultado, index) => ({
+  [arrayDeEstrategias[index].name]: resultado
+}));
+
+console.log("Placar de "+ quantCampeonatos + " campeonatos:");
+console.log(placarCampeonatao);
+console.log("Quantidade de cada rodada:");
+console.log(arrayQuantRodadas);

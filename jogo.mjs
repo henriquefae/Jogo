@@ -67,30 +67,41 @@ function campeonatoDaBlow (arrayDeEstrategias, quantRodadas) {
   return placar;
 }
 
+function multiplosCampeonatosDaBlow (
+  arrayDeEstrategias, quantCampeonatos
+) {
+  let resultadosCampeonatao = new Array(arrayDeEstrategias.length).fill(0);
+  const arrayQuantRodadas = [];
+  for (let i = 0; i < quantCampeonatos; i++) {
+    const quantRodadas = Math.ceil(Math.random() * 800 + 200); //entre 200 e 1000 rodadas
+    arrayQuantRodadas.push(quantRodadas);
+    const placar = campeonatoDaBlow(
+      arrayDeEstrategias, quantRodadas
+    );
+    for (let j = 0; j < arrayDeEstrategias.length; j++){
+      resultadosCampeonatao[j] += Object.values(placar[j])[0];
+    }
+  }
+  const placarCampeonatao = resultadosCampeonatao.map((resultado, index) => ({
+    [arrayDeEstrategias[index].name]: resultado
+  }));
+  
+  return {
+    arrayQuantRodadas,
+    placarCampeonatao
+  }
+}
+
 const arrayDeEstrategias = [
   estrategiaAleatoria,
   estrategiaFalharApenasNaPrimeira,
   estrategiaColaborarPrimeiroERepetir
 ];
-
 const quantCampeonatos = 5;
-let resultadosCampeonatao = new Array(arrayDeEstrategias.length).fill(0);
-const arrayQuantRodadas = [];
-for (let i = 0; i < quantCampeonatos; i++) {
-  const quantRodadas = Math.ceil(Math.random() * 800 + 200); //entre 200 e 1000 rodadas
-  arrayQuantRodadas.push(quantRodadas);
-  const placar = campeonatoDaBlow(
-    arrayDeEstrategias, quantRodadas
-  );
-  for (let j = 0; j < arrayDeEstrategias.length; j++){
-    resultadosCampeonatao[j] += Object.values(placar[j])[0];
-  }
-}
-const placarCampeonatao = resultadosCampeonatao.map((resultado, index) => ({
-  [arrayDeEstrategias[index].name]: resultado
-}));
+
+const resultado = multiplosCampeonatosDaBlow(arrayDeEstrategias, quantCampeonatos);
 
 console.log("Placar de "+ quantCampeonatos + " campeonatos:");
-console.log(placarCampeonatao);
+console.log(resultado.placarCampeonatao);
 console.log("Quantidade de cada rodada:");
-console.log(arrayQuantRodadas);
+console.log(resultado.arrayQuantRodadas);

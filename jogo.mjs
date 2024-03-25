@@ -2,6 +2,8 @@ import {estrategiaColaborarPrimeiroERepetir} from "./estrategias/estrategiaColab
 import {estrategiaFalharApenasNaPrimeira} from './estrategias/estrategiaFalharApenasNaPrimeira.mjs';
 import { estrategiaAleatoria } from "./estrategias/estrategiaAleatoria.mjs";
 import { henrique } from './estrategias/henrique.mjs';
+import { estrategiaVitor } from "./estrategias/estrategiaVitor.mjs";
+import { estrategiaOrlando } from "./estrategias/orlando.mjs";
 
 function jogoDaBlow(estrategiaJogador1, estrategiaJogador2, quantRodadas) {
   let moedasJogador1 = 0;
@@ -98,6 +100,8 @@ const arrayDeEstrategias = [
   estrategiaFalharApenasNaPrimeira,
   estrategiaColaborarPrimeiroERepetir,
   henrique
+  estrategiaVitor,
+  estrategiaOrlando
 ];
 const quantCampeonatos = 5;
 

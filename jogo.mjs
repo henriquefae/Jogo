@@ -1,6 +1,7 @@
 import {estrategiaColaborarPrimeiroERepetir} from "./estrategias/estrategiaColaborarPrimeiroERepetir.mjs";
 import {estrategiaFalharApenasNaPrimeira} from './estrategias/estrategiaFalharApenasNaPrimeira.mjs';
 import { estrategiaAleatoria } from "./estrategias/estrategiaAleatoria.mjs";
+import { henrique } from './estrategias/henrique.mjs';
 
 function jogoDaBlow(estrategiaJogador1, estrategiaJogador2, quantRodadas) {
   let moedasJogador1 = 0;
@@ -95,7 +96,8 @@ function multiplosCampeonatosDaBlow (
 const arrayDeEstrategias = [
   estrategiaAleatoria,
   estrategiaFalharApenasNaPrimeira,
-  estrategiaColaborarPrimeiroERepetir
+  estrategiaColaborarPrimeiroERepetir,
+  henrique
 ];
 const quantCampeonatos = 5;
 
